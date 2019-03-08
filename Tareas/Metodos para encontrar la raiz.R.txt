@@ -1,0 +1,119 @@
+# Metodo de Biseccion
+
+Fx <- function(x) exp(x) - pi*x
+
+biseccion <- function(a,b) {
+  x<-seq(a,b,0.001)
+  plot(x,Fx(x),type="l",col="blue")
+  abline(h=0,col="blue")
+  x<-b
+  #d<-(a+b)/2
+  i<-0
+  error<-abs(a-b)/2
+  c<-0
+  while (error > 1.e-8) {
+    i<-i+1
+    if (Fx(x) == 0) break
+    if (Fx(x)*Fx(a) < 0) b <- x else {a <- x}
+    #d<-x
+    x<-(a+b)/2
+    text(x,0,i,cex=0.8,col="red")
+    error<-abs(a-b)/2
+    c<-c+1
+    cat("Iter=",c,"\tX=",x,"\tE=",error,"\n")
+  }
+  cat("Se encontro la raiz ",x," en ",c," iteraciones")
+}
+biseccion(0,1)
+################################################################################
+#Metodo de punto fijo
+Gx <-function(x) exp(x)/pi
+#f=expression(exp(x)/pi)
+#r=D(f,'x')
+#cat(r)
+
+puntofijo<-function(a,b){
+  k = 1
+  x0=b
+  l=(Gx(a)-a)*(Gx(b)-b)
+  if(l>0){
+    cat("No existe raiz en ese intervalo")
+  }
+  else{
+    repeat{
+      x1 = Gx(x0)
+      dx = abs(x1 - x0)
+      x0 = x1
+      cat("Iter=", k,"\tX=", x1, "\tE= ",dx, "\n")
+      k = k+1
+      if(dx< 1e-8|| k > 100) break;
+    }
+    if( dx > 1e-8 ){
+      cat("No hubo convergencia ")
+    } else{
+      cat("Se encontro la raiz ",x1," en ",k-1," iteraciones")
+    }
+  }
+}
+
+puntofijo(0,1)
+
+################################################################################
+#Metodo de Newton
+
+F1x <- function(x) exp(x)-pi
+
+newton <- function(a,b) {
+  x<-b
+  c<-0
+  for(i in 1:20) {
+    x<-x-Fx(x)/F1x(x)
+    if (Fx(x) == 0) break
+    error<-abs(Fx(x)/F1x(x))
+    c<-c+1
+    cat("Iter=",c,"\tX=",x,"\tE=",error,"\n")
+    if(error< 1e-8) break;
+    
+  }
+  cat("Se encontro la raiz ",x," en ",c," iteraciones")
+}
+newton(0,1)
+
+################################################################################
+#Metodo de la posicion falsa
+
+falsa <- function(a,b) {
+  x<-seq(a,b,0.1)
+  plot(x,Fx(x),type="l",col="blue")
+  abline(h=0,col="blue")
+  #x<-b
+  #d<-(Fx(b)*a-Fx(a)*b)/(Fx(b)-Fx(a))
+  error<-1
+  while (error > 1.e-8) {
+    x<-(Fx(b)*a-Fx(a)*b)/(Fx(b)-Fx(a))
+    if (Fx(x) == 0) break
+    if (Fx(x)*Fx(a) < 0) {b <- x}
+    else {a <- x}
+    error<-abs(Fx(x)/F1x(x))
+    points(rbind(c(x,0)),pch=19,cex=0.7,col="red")
+    cat("X=",x,"\t","E=",error,"\n")
+  }
+}
+falsa(0,1)
+
+################################################################################
+#Metodo de la secante
+
+secante <- function(x0,x1) {
+  x<-(Fx(x1)*x0-Fx(x0)*x1)/(Fx(x1)-Fx(x0))
+  error <-1
+  while (error > 1.e-8) {
+    x0<-x1
+    x1<-x
+    x<-(Fx(x1)*x0-Fx(x0)*x1)/(Fx(x1)-Fx(x0))
+    if (Fx(x) == 0) break
+    error<-abs(Fx(x)/F1x(x))
+    cat("X=",x,"\t","E=",error,"\n")
+  }
+}
+secante(0,1)
