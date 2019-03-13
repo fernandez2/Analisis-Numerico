@@ -17,14 +17,14 @@ points(-1,0,col="darkgreen")
 Fx<- function(x) tan(pi*x)-sin(pi*x)
 
 #Funcion 2A
-funcionraiz<-function(x1,x2,err)
+funcionraiz<-function(x1,x2)
 {
   ERROR=1
   x0=x1-((Fx(x1)*(x1-x2))/(Fx(x1)-Fx(x2)))
   x1=x2
   x2=x0
   contador=0
-  while(ERROR>err)
+  while(ERROR>1e-9)
   {
     x3=x1-((Fx(x1)*(x1-x2))/(Fx(x1)-Fx(x2)))
     ERROR=abs((x3-x2)/x3)*100
@@ -39,11 +39,11 @@ funcionraiz<-function(x1,x2,err)
 #Derivada de F(x) para implementar el metodo newton
 Dx <- function(x) (((1/cos(pi*x))^2)*pi)-((pi*cos(pi*x))*pi)
 #Funcion  2B Mejorado
-newtonMejorado<-function(x,err){
+newtonMejorado<-function(x){
   ERROR=1
   contador=0
   #Aceleracion de Atkins
-  while(contador<4 && ERROR>err){
+  while(contador<4 && ERROR>1e-9){
     if(x!=0){ 
       xanterior=x
       x=x-((Fx(x))/Dx(x))
@@ -68,7 +68,7 @@ newtonMejorado<-function(x,err){
     contador=contador+1
   }
   
-  while(ERROR>err){
+  while(ERROR>1e-9){
     if(x!=0){
       x3=x2-(((x2-x1)^2)/(x2-(2*x1)+x0))
       x0=x1
@@ -84,8 +84,8 @@ newtonMejorado<-function(x,err){
 }
 
 
-funcionraiz(0.9,1.3,1e-9)
-funcionraiz(1.9,2.2,1e-9)
+funcionraiz(0.9,1.4)
+funcionraiz(1.9,2.4)
 
-newtonMejorado(0.9,1e-9)
-newtonMejorado(1.9,1e-9)
+newtonMejorado(0.9)
+newtonMejorado(1.9)
